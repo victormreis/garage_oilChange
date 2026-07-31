@@ -1,27 +1,26 @@
 <x-layout title="Register Oil Change" header="Register new oil Change">
-    <h3>Register new oil Change</h3>
 
-    <form action="{{route('vehicles.changeoil', $vehicle)}}" method="POST">
+    <form action="{{route('vehicles.changeoil', $vehicle)}}" method="POST" class="form">
         @csrf
 
-        <label for="odometer">Odometer</label>
-        <input type="text" name="odometer" id="odometer" value="{{$vehicle->mileage}}">
-        @error('odometer')
-        <span>{{$message}}</span>
-        @enderror
+        <div class="form-field">
+            <label for="odometer">Odometer</label>
+            <input type="text" name="odometer" id="odometer" value="{{$vehicle->mileage}}">
+            @error('odometer')
+            <span class="field-error">{{$message}}</span>
+            @enderror
+        </div>
 
-        <label for="date">Change Date</label>
-        <input type="date" name="date" id="date" value="{{old('date')}}">
-        @error('date')
-        <span style="color: red">{{$message}}</span>
-        @enderror
+        <div class="form-field">
+            <label for="date">Change Date</label>
+            <input type="date" name="date" id="date" value="{{old('date')}}">
+            @error('date')
+            <span class="field-error">{{$message}}</span>
+            @enderror
+        </div>
 
-
-        <button>Change Oil</button>
-
-        <br>
-        <br>
-        <a href="{{route('vehicles.show', $vehicle)}}">Back to Vehicle Details</a>
-
+        <button class="btn">Change Oil</button>
     </form>
+
+    <a href="{{route('vehicles.show', $vehicle)}}" class="link-back">Back to Vehicle Details</a>
 </x-layout>
