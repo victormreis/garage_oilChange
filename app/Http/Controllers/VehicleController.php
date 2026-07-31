@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateOilChangeRequest;
+use App\Http\Requests\SaveVehicleRequest;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
@@ -28,16 +30,10 @@ class VehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SaveVehicleRequest $request)
     {
-        $validated = $request->validate([
-            'brand' => 'required',
-            'model' => 'required',
-            'year' => 'required|integer',
-            'mileage' => 'required|integer',
-        ]);
 
-        $vehicle = Vehicle::create($validated);
+        Vehicle::create($request->validated());
 
         return redirect(route('vehicles.index'));
     }
@@ -68,16 +64,9 @@ class VehicleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vehicle $vehicle)
+    public function update(SaveVehicleRequest $request, Vehicle $vehicle)
     {
-        $validated = $request->validate([
-            'brand' => 'required',
-            'model' => 'required',
-            'year' => 'required|integer',
-            'mileage' => 'required|integer',
-        ]);
-
-        $vehicle->update($validated);
+        $vehicle->update($request->all());
 
         return redirect(route('vehicles.show', $vehicle));
     }
@@ -99,25 +88,10 @@ class VehicleController extends Controller
     }
 
 
-    public function changeOil(Request $request, Vehicle $vehicle) {
+    public function changeOil(CreateOilChangeRequest $request, Vehicle $vehicle)
+    {
 
-        $validated = $request->validate([
-            'odometer' => 'required|integer',
-            'date' => 'required|date|before_or_equal:today',
-        ]);
-
-        $lastChange = $vehicle->getLastChange();
-
-        if($lastChange) {
-            if($lastChange->odometer > $validated['odometer']) {
-                return back()->withErrors(['odometer' => 'The odometer must be less than or equal to the odometer on last change.']);
-            }
-            if($lastChange->date < $validated['date']) {
-                return back()->withErrors(['date' => 'The date must be grater than or equal to the date on last change.']);
-            }
-        }
-
-        $vehicle->oilChanges()->create($validated);
+        $vehicle->oilChanges()->create($request->validated());
 
         return redirect(route('vehicles.show', $vehicle));
 
