@@ -1,41 +1,30 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Vehicles</title>
-</head>
-<body>
-<h1>Vehicles Garage</h1>
+<x-layout title="Garage" header="Garage Vehicles">
 
-<h3>All Vehicles registered</h3>
-<a href="{{route('vehicles.create')}}">
-    <button>Register new Vehicle</button>
-</a>
+    <h3>All Vehicles registered</h3>
+    <a href="{{route('vehicles.create')}}">
+        <button>Register new Vehicle</button>
+    </a>
 
-@if($vehicles->isEmpty())
-    <p>No vehicles registered yet! register your first vehicle</p>
+    @if($vehicles->isEmpty())
+        <p>No vehicles registered yet! register your first vehicle</p>
 
-@endif
+    @endif
 
-<ul>
-    @foreach($vehicles as $vehicle)
+    <ul>
+        @foreach($vehicles as $vehicle)
 
-        <li class="vehicle-card">
-            <p>Brand: {{$vehicle->brand}} - Model: {{$vehicle->model}} - Year: {{$vehicle->year}} </p>
-            @if($vehicle->isDue())
-                <span class="badge">Need oil Change</span>
-            @endif
-            <a href="{{route('vehicles.show', $vehicle)}}">
-                <button>View Details</button>
-            </a>
-        </li>
-    @endforeach
-</ul>
-</body>
-</html>
+            <li class="vehicle-card">
+                <p>Brand: {{$vehicle->brand}} - Model: {{$vehicle->model}} - Year: {{$vehicle->year}} </p>
+                @if($vehicle->isDue())
+                    <span class="badge">Need oil Change</span>
+                @endif
+                <a href="{{route('vehicles.show', $vehicle)}}">
+                    <button>View Details</button>
+                </a>
+            </li>
+        @endforeach
+    </ul>
+</x-layout>
 
 <style>
     .vehicle-card {
