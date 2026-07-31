@@ -66,7 +66,7 @@ class VehicleController extends Controller
      */
     public function update(SaveVehicleRequest $request, Vehicle $vehicle)
     {
-        $vehicle->update($request->all());
+        $vehicle->update($request->validated());
 
         return redirect(route('vehicles.show', $vehicle));
     }
