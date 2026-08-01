@@ -31,7 +31,7 @@ class ImportVehiclesFromCsv implements ShouldQueue
         $fullPath = Storage::path($this->path);
         $handle = fopen($fullPath, 'r');
 
-        $header = fgetcsv($handle); // primeira linha = nomes das colunas
+        $header = fgetcsv($handle);
 
         $chunk = [];
         $totalProcessed = 0;
