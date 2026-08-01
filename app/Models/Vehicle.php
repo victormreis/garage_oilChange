@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Vehicle extends Model
 {
@@ -23,6 +24,11 @@ class Vehicle extends Model
     public function oilChanges():HasMany {
 
         return $this->hasMany(OilCheck::class);
+    }
+
+    public function lastOilChange(): HasOne
+    {
+        return $this->hasOne(OilCheck::class)->latestOfMany('date');
     }
 
 
@@ -62,10 +68,7 @@ class Vehicle extends Model
 
 
     public function getLastChange() {
-        $lastChange = $this->oilChanges()->latest('date')->first();
-
-
-        return $lastChange;
+        return $this->lastOilChange;
     }
 
 }
