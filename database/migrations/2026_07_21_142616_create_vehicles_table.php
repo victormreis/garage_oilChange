@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Owner;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,7 @@ return new class extends Migration
             $table->string('brand');
             $table->string('model');
             $table->integer('year');
+            $table->foreignIdFor(Owner::class)->nullable()->constrained();
             $table->integer('mileage');
 //            $table->enum('type_fuel', ['Gasoline', 'Diesel']);
             $table->timestamps();

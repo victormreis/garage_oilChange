@@ -39,6 +39,15 @@ class VehicleResource extends Resource
                     ->numeric()
                     ->minValue(0)
                     ->suffix('km'),
+                Forms\Components\TextInput::make('Owner')
+                    ->required()
+                    ->maxLength(255),
+//                Forms\Components\Select::make('owner_id')
+//                    ->relationship(name: 'owner', titleAttribute: 'owner')
+//                    ->createOptionForm([
+//                        Forms\Components\TextInput::make('owner')
+//                            ->required(),
+//                    ])
             ]);
     }
 
