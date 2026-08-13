@@ -12,9 +12,11 @@ class VehicleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $vehicles = Vehicle::query()->with('oilChanges')->get();
+        $perPage = min($request->input('per_page', 10), 100);
+
+        $vehicles = Vehicle::query()->with('oilChanges')->paginate($perPage);
 
         return view('vehicles.index', compact('vehicles'));
     }

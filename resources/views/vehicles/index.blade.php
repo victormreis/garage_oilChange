@@ -22,4 +22,8 @@
             </li>
         @endforeach
     </ul>
+
+    <div>
+        {{ $vehicles->links() }}
+    </div>
 </x-layout>
