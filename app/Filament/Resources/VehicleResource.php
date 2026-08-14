@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VehicleResource\Pages;
 use App\Filament\Resources\VehicleResource\RelationManagers;
+use App\Models\Owner;
 use App\Models\Vehicle;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -33,28 +34,37 @@ class VehicleResource extends Resource
                     ->required()
                     ->numeric()
                     ->minValue(1900)
-                    ->maxValue((int) date('Y') + 1),
+                    ->maxValue((int)date('Y') + 1),
                 Forms\Components\TextInput::make('mileage')
                     ->required()
                     ->numeric()
                     ->minValue(0)
                     ->suffix('km'),
-                Forms\Components\TextInput::make('Owner')
-                    ->required()
-                    ->maxLength(255),
-//                Forms\Components\Select::make('owner_id')
-//                    ->relationship(name: 'owner', titleAttribute: 'owner')
-//                    ->createOptionForm([
-//                        Forms\Components\TextInput::make('owner')
-//                            ->required(),
-//                    ])
+                Forms\Components\Select::make('owner_id')
+                    ->label('Owner')
+                    ->relationship(
+                        name: 'owner',
+                        modifyQueryUsing: fn ($query) => $query,
+                    )
+                    ->getOptionLabelFromRecordUsing(fn (Owner $record) => "{$record->name} - {$record->email}")
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required(),
+                        Forms\Components\TextInput::make('email')
+                            ->email()
+                            ->required(),
+                        Forms\Components\TextInput::make('phone')
+                            ->required(),
+                    ])
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('lastOilChange'))
+            ->modifyQueryUsing(fn(Builder $query) => $query->with('lastOilChange'))
             ->columns([
                 Tables\Columns\TextColumn::make('brand')
                     ->searchable()
@@ -75,7 +85,7 @@ class VehicleResource extends Resource
                 Tables\Columns\IconColumn::make('is_due')
                     ->label('Need oil change')
                     ->boolean()
-                    ->state(fn (Vehicle $record) => $record->isDue()),
+                    ->state(fn(Vehicle $record) => $record->isDue()),
             ])
             ->filters([
                 //
