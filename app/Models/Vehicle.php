@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Queue\Connectors\BeanstalkdConnector;
 
 class Vehicle extends Model
 {
@@ -21,7 +23,8 @@ class Vehicle extends Model
     ];
 
 
-    public function oilChanges():HasMany {
+    public function oilChanges(): HasMany
+    {
 
         return $this->hasMany(OilCheck::class);
     }
@@ -32,18 +35,23 @@ class Vehicle extends Model
     }
 
 
+    public function owner(): belongsTo
+    {
+        return $this->belongsTo(Owner::class);
+    }
 
-    public function getMetrics() {
+
+    public function getMetrics()
+    {
         $lastChange = $this->getLastChange();
 
-        if($lastChange) {
+        if ($lastChange) {
             $kmSince = $this->mileage - $lastChange->odometer;
             $daySince = $lastChange->date->diffInDays(now());
-        }else{
+        } else {
             $daySince = $this->created_at->diffInDays(now());
             $kmSince = $this->mileage;
         }
-
 
 
         return [
@@ -53,7 +61,8 @@ class Vehicle extends Model
     }
 
 
-    public function isDue() {
+    public function isDue()
+    {
 
         $metrics = $this->getMetrics();
 
@@ -66,8 +75,8 @@ class Vehicle extends Model
     }
 
 
-
-    public function getLastChange() {
+    public function getLastChange()
+    {
         return $this->lastOilChange;
     }
 
